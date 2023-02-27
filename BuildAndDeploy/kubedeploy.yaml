@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: apsnet-app
-        image: rbrcontainerregistry.azurecr.io/aspnetapp:latest
+        image: rbrcontainerregistry.azurecr.io/aspnetapp:14
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
