@@ -34,7 +34,7 @@ namespace WorkloadIdentity.Web.Pages
             {
                 SecretClient client = new SecretClient(
                   new Uri(keyvaultUrl),
-                  new DefaultAzureCredential());
+                  new DefaultAzureCredential(options));
 
                 // <getsecret>
                 var keyvaultSecret = client.GetSecret(secretName).Value;
