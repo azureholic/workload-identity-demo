@@ -1,4 +1,4 @@
-name: Run Azure Login with OpenID Connect
+name: Build and Deploy to AKS
 on: workflow_dispatch
 
 permissions:
@@ -23,4 +23,11 @@ jobs:
     - name: Build Container
       working-directory: ./WorkloadIdentity.Web
       run: az acr build -r rbrcontainerregistry -t rbrcontainerregistry.azurecr.io/aspnetapp:latest --file dockerfile --platform linux .
+
+    - name: Get AKS Credentials
+      run: az aks get-credentials -g rg-k8s --name rbr-aks
+      
+    - name: Deploy to AKS
+      working-directory: ./BuildAndDeploy
+      run: kubectl apply -f kubedeploy.yaml
       
