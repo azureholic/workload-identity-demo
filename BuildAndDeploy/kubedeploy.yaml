@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aspnet-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: aspnet-app
+  template:
+    metadata:
+      labels:
+        app: aspnet-app
+        service: aspnet-app
+    spec:
+      containers:
+      - name: apsnet-app
+        image: rbrcontainerregistry.azurecr.io/aspnetapp:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        env:
+        - name: "ASPNETCORE_ENVIRONMENT"
+          value: "Kubernetes"
+        - name: "ASPNETCORE_URLS"
+          value: "http://+:8080"
+          
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: aspnet-app
+  name: aspnet-app-service
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: aspnet-app
+  type: ClusterIP
+

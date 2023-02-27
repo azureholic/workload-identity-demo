@@ -1,0 +1,15 @@
+FROM mcr.microsoft.com/dotnet/sdk:7.0 AS builder
+WORKDIR /app
+ADD . .
+RUN dotnet build WorkloadIdentity.Web.csproj && dotnet publish -c release
+
+ARG BASEIMAGE
+FROM mcr.microsoft.com/dotnet/aspnet:7.0
+WORKDIR /app
+COPY --from=builder /app/bin/release/net7.0/publish/ .
+
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://*:8080
+# Kubernetes runAsNonRoot
+USER 65532:65532
+ENTRYPOINT ["dotnet", "WorkloadIdentity.Web.dll"]
