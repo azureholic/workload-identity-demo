@@ -22,12 +22,22 @@ jobs:
   
     - name: Build Container
       working-directory: ./WorkloadIdentity.Web
-      run: az acr build -r rbrcontainerregistry -t rbrcontainerregistry.azurecr.io/aspnetapp:latest --file dockerfile --platform linux .
+      run: az acr build -r rbrcontainerregistry -t rbrcontainerregistry.azurecr.io/aspnetapp:${{ github.run_number }} --file dockerfile --platform linux .
 
-    - name: Get AKS Credentials
-      run: az aks get-credentials -g rg-k8s --name rbr-aks
+    - name: Set AKS context
+      uses: azure/aks-set-context@v3
+      with:
+        resource-group: 'rg-k8s' 
+        cluster-name: 'rbr-aks'
+  
+    - name: Setup kubectl
+      uses: azure/setup-kubectl@v3
       
     - name: Deploy to AKS
-      working-directory: ./BuildAndDeploy
-      run: kubectl apply -f kubedeploy.yaml
+      uses: Azure/k8s-deploy@v4
+      with:
+        namespace: 'default'
+        manifests: ./BuildAndDeploy/kubedeploy.yaml
+        images: 'rbrcontainerregistry.azurecr.io/rbrcontainerregistry.azurecr.io/aspnetapp:${{ github.run_number }}'
+        pull-images: false 
       
