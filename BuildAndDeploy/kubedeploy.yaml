@@ -12,10 +12,12 @@ spec:
       labels:
         app: aspnet-app
         service: aspnet-app
+        azure.workload.identity/use : "true"
     spec:
+      serviceAccountName: k8s-sp
       containers:
-      - name: apsnet-app
-        image: rbrcontainerregistry.azurecr.io/aspnetapp:14
+      - name: aspnet-app
+        image: rbrcontainerregistry.azurecr.io/aspnetapp:16
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
@@ -25,6 +27,8 @@ spec:
           value: "Kubernetes"
         - name: "ASPNETCORE_URLS"
           value: "http://+:8080"
+        
+        
           
 ---
 # service

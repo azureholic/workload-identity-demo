@@ -23,6 +23,13 @@ namespace WorkloadIdentity.Web.Pages
         {
             string keyvaultUrl = "https://rbr-kv-we.vault.azure.net/";
             string secretName = "supersecret";
+
+            DefaultAzureCredentialOptions options = new DefaultAzureCredentialOptions
+            {
+                ManagedIdentityClientId = "deb5d59e-8a1d-4860-8342-0eee384b3057"
+
+            };
+
             try
             {
                 SecretClient client = new SecretClient(
