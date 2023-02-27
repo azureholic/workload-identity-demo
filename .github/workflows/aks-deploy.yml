@@ -38,6 +38,6 @@ jobs:
       with:
         namespace: 'default'
         manifests: ./BuildAndDeploy/kubedeploy.yaml
-        images: 'rbrcontainerregistry.azurecr.io/rbrcontainerregistry.azurecr.io/aspnetapp:${{ github.run_number }}'
+        images: 'rbrcontainerregistry.azurecr.io/aspnetapp:${{ github.run_number }}'
         pull-images: false 
       
