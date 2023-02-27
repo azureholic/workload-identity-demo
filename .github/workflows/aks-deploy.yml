@@ -22,8 +22,5 @@ jobs:
   
     - name: Build Container
       working-directory: ./WorkloadIdentity.Web
-      run: az acr build -r rbrcontainerregistry \
-           -t rbrcontainerregistry.azurecr.io/aspnetapp:latest \
-           -f ./dockerfile \
-           --platform linux .
+      run: az acr build -r rbrcontainerregistry -t rbrcontainerregistry.azurecr.io/aspnetapp:latest --file dockerfile --platform linux .
       
