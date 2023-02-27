@@ -1,3 +1,5 @@
+using Azure.Core.Diagnostics;
+using Azure.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +8,19 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
 var builder = WebApplication.CreateBuilder(args);
+
+//diagnostics for troubleshooting
+using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
+DefaultAzureCredentialOptions options = new DefaultAzureCredentialOptions()
+{
+    Diagnostics =
+    {
+        LoggedHeaderNames = { "x-ms-request-id" },
+        LoggedQueryParameters = { "api-version" },
+        IsLoggingContentEnabled = true
+    }
+};
+
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
@@ -22,6 +37,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
         ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 });
 
+
+
+
 // Add services to the container.
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
@@ -35,9 +53,18 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-app.UseForwardedHeaders();
+
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
+
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https";
+    return next();
+});
+app.UseForwardedHeaders();
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
