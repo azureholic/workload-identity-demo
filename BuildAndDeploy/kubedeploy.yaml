@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: aspnet-app-deployment
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       service: aspnet-app
@@ -17,7 +17,7 @@ spec:
       serviceAccountName: k8s-sp
       containers:
       - name: aspnet-app
-        image: rbrcontainerregistry.azurecr.io/aspnetapp:16
+        image: rbrcontainerregistry.azurecr.io/aspnetapp:18
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
