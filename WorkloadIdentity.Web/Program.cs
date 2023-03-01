@@ -19,13 +19,13 @@ DefaultAzureCredentialOptions dataProtectionCredentialOptions = new DefaultAzure
         LoggedQueryParameters = { "api-version" },
         IsLoggingContentEnabled = true
     },
-    ManagedIdentityClientId = builder.Configuration["DataProtection:ClientId"],
-    
-    
-
+    ManagedIdentityClientId = builder.Configuration["DataProtection:ClientId"]
 };
 
 var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
+
+Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
+Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://storage.azure.com/.default" })).Token);
 
 builder.Services.AddDataProtection()
     .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
