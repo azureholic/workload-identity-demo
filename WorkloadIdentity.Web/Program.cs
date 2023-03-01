@@ -1,29 +1,55 @@
 using Azure.Core.Diagnostics;
 using Azure.Identity;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 //diagnostics for troubleshooting
 using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
-DefaultAzureCredentialOptions options = new DefaultAzureCredentialOptions()
+DefaultAzureCredentialOptions dataProtectionCredentialOptions = new DefaultAzureCredentialOptions()
 {
     Diagnostics =
     {
         LoggedHeaderNames = { "x-ms-request-id" },
         LoggedQueryParameters = { "api-version" },
         IsLoggingContentEnabled = true
-    }
+    },
+    ManagedIdentityClientId = builder.Configuration["DataProtection:ClientId"],
+    
+    
+
 };
 
+var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
+
+builder.Services.AddDataProtection()
+    .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
+    .ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyvaultUri"]), dataProtectionCredential)
+    .SetApplicationName("SharedCookieApp");
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+     .AddMicrosoftIdentityWebApp(options => {
+            builder.Configuration.Bind("AzureAd", options);
+            options.Events = new OpenIdConnectEvents
+            {
+                OnRedirectToIdentityProvider = (context) =>
+                {
+                    if (context.Request.Headers.ContainsKey("X-Forwarded-Host"))
+                    {
+                        context.ProtocolMessage.RedirectUri = "https://" + context.Request.Headers["X-Forwarded-Host"] + builder.Configuration.GetSection("AzureAd").GetValue<String>("CallbackPath");
+                    }
+                    return Task.FromResult(0);
+                }
+            };
+        });
+  
+
+
 
 builder.Services.AddAuthorization(options =>
 {
