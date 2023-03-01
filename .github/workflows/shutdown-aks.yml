@@ -1,0 +1,22 @@
+name: Shutdown AKS
+
+on:
+  schedule:
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+  
+jobs: 
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+     
+    - name: Azure Login (Federated)
+      uses: azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  
+    - name: Shutdown AKS
+      run: az aks shutdown -g rg-k8s -n rbr-aks
