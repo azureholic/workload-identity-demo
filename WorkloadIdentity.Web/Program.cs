@@ -27,8 +27,6 @@ DefaultAzureCredentialOptions dataProtectionCredentialOptions = new DefaultAzure
     ExcludeEnvironmentCredential = true,
     ExcludeInteractiveBrowserCredential = true,
     ExcludeManagedIdentityCredential = false
-
-    
 };
 
 if (builder.Environment.IsDevelopment())
