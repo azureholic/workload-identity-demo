@@ -19,8 +19,22 @@ DefaultAzureCredentialOptions dataProtectionCredentialOptions = new DefaultAzure
         LoggedQueryParameters = { "api-version" },
         IsLoggingContentEnabled = true
     },
-    ManagedIdentityClientId = builder.Configuration["DataProtection:ClientId"]
+    ManagedIdentityClientId = builder.Configuration["DataProtection:ClientId"],
+    ExcludeSharedTokenCacheCredential = true,
+    ExcludeVisualStudioCodeCredential = true,
+    ExcludeVisualStudioCredential = true,
+    ExcludeAzureCliCredential = true,
+    ExcludeEnvironmentCredential = true,
+    ExcludeInteractiveBrowserCredential = true,
+    ExcludeManagedIdentityCredential = false
+
+    
 };
+
+if (builder.Environment.IsDevelopment())
+{
+    dataProtectionCredentialOptions.ExcludeAzureCliCredential = false;
+}
 
 var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
 
