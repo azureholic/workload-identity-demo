@@ -12,13 +12,14 @@ spec:
       labels:
         app: aspnet-app
         service: aspnet-app
-        azure.workload.identity/use : "true"
+        azure.workload.identity/use: "true"
+        azure.workload.identity/inject-proxy-sidecar: "true"
     spec:
       serviceAccountName: k8s-sp
       containers:
       - name: aspnet-app
-        image: rbrcontainerregistry.azurecr.io/aspnetapp:18
-        imagePullPolicy: Always
+        image: rbrcontainerregistry.azurecr.io/aspnetapp:29
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
           protocol: TCP

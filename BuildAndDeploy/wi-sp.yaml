@@ -3,7 +3,7 @@ kind: ServiceAccount
 metadata:
   annotations:
     azure.workload.identity/client-id: 16cd2267-9b37-4622-b416-b75ec1bfb29c
-  #labels:
-  #  azure.workload.identity/use: "true"  # if you're using azure-workload-identity v1.0.0+, this label is not required.
+  labels:
+    azure.workload.identity/use: "true"  
   name: k8s-sp
   namespace: default
