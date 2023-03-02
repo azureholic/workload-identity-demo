@@ -36,7 +36,9 @@ if (builder.Environment.IsDevelopment())
 
 var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
 
+
 Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
+Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://storage.azure.com/.default" })).Token);
 Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://storage.azure.com/.default" })).Token);
 
 builder.Services.AddDataProtection()
