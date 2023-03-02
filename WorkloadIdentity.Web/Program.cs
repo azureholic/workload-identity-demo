@@ -37,15 +37,15 @@ if (builder.Environment.IsDevelopment())
 var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
 
 
-Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
-Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://vault.azure.net/.default" })).Token);
-Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://storage.azure.com/.default" })).Token);
+//Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
+//Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://vault.azure.net/.default" })).Token);
+//Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://storage.azure.com/.default" })).Token);
 
-builder.Services.AddDataProtection()
+//builder.Services.AddDataProtection()
     
-    .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
-    .ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyvaultUri"]), dataProtectionCredential)
-    .SetApplicationName("SharedCookieApp");
+//    .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
+//    .ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyvaultUri"]), dataProtectionCredential)
+//    .SetApplicationName("SharedCookieApp");
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
      .AddMicrosoftIdentityWebApp(options => {
