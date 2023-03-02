@@ -13,10 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
 
 DefaultAzureCredentialOptions dataProtectionCredentialOptions =
-        DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
-            builder.Configuration["DataProtection:ClientId"],
-            builder.Environment
-    );
+        DefaultCredentialOptions.GetDefaultAzureCredentialOptions(builder.Environment);
 
 var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
 
@@ -28,7 +25,7 @@ Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
 builder.Services.AddDataProtection()
     .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
     .ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyvaultUri"]), dataProtectionCredential)
-    .SetApplicationName("SharedCookieApp");
+    .SetApplicationName("WorkloadIdentityApp");
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
      .AddMicrosoftIdentityWebApp(options => {
