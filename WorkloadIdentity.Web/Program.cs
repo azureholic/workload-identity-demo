@@ -5,40 +5,24 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-
+using WorkloadIdentity.Web.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //diagnostics for troubleshooting
 using AzureEventSourceListener listener = AzureEventSourceListener.CreateConsoleLogger();
-DefaultAzureCredentialOptions dataProtectionCredentialOptions = new DefaultAzureCredentialOptions()
-{
-    Diagnostics =
-    {
-        LoggedHeaderNames = { "x-ms-request-id" },
-        LoggedQueryParameters = { "api-version" },
-        IsLoggingContentEnabled = true
-    },
-    ManagedIdentityClientId = builder.Configuration["DataProtection:ClientId"],
-    ExcludeSharedTokenCacheCredential = true,
-    ExcludeVisualStudioCodeCredential = true,
-    ExcludeVisualStudioCredential = true,
-    ExcludeAzureCliCredential = true,
-    ExcludeEnvironmentCredential = true,
-    ExcludeInteractiveBrowserCredential = true,
-    ExcludeManagedIdentityCredential = false
-};
 
-if (builder.Environment.IsDevelopment())
-{
-    dataProtectionCredentialOptions.ExcludeAzureCliCredential = false;
-}
+DefaultAzureCredentialOptions dataProtectionCredentialOptions =
+        DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
+            builder.Configuration["DataProtection:ClientId"],
+            builder.Environment
+    );
 
 var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
 
 
-//Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
-//Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://vault.azure.net/.default" })).Token);
+Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
+Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://vault.azure.net/.default" })).Token);
 //Console.WriteLine(dataProtectionCredential.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://storage.azure.com/.default" })).Token);
 
 //builder.Services.AddDataProtection()
