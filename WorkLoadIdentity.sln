@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", 
 	ProjectSection(SolutionItems) = preProject
 		BuildAndDeploy\azure-wi-webhook.yaml = BuildAndDeploy\azure-wi-webhook.yaml
 		BuildAndDeploy\kubedeploy.yaml = BuildAndDeploy\kubedeploy.yaml
+		BuildAndDeploy\nginx-route.yaml = BuildAndDeploy\nginx-route.yaml
 		BuildAndDeploy\wi-sp.yaml = BuildAndDeploy\wi-sp.yaml
 	EndProjectSection
 EndProject

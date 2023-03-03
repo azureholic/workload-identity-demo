@@ -1,7 +1,30 @@
+---
+# namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aspnet-app
+  labels:
+    name: aspnet-app
+---
+#service account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    azure.workload.identity/client-id: 16cd2267-9b37-4622-b416-b75ec1bfb29c
+  labels:
+    azure.workload.identity/use: "true"  
+  name: aspnet-sa
+  namespace: aspnet-app
+
+---
+#deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: aspnet-app-deployment
+  namespace: aspnet-app
 spec:
   replicas: 1
   selector:
@@ -14,10 +37,10 @@ spec:
         service: aspnet-app
         azure.workload.identity/use: "true"
     spec:
-      serviceAccountName: k8s-sp
+      serviceAccountName: aspnet-sa
       containers:
       - name: aspnet-app
-        image: rbrcontainerregistry.azurecr.io/aspnetapp:29
+        image: rbrcontainerregistry.azurecr.io/aspnetapp:33
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
@@ -38,6 +61,7 @@ metadata:
   labels:
     app: aspnet-app
   name: aspnet-app-service
+  namespace: aspnet-app
 spec:
   ports:
     - port: 80
@@ -47,3 +71,30 @@ spec:
     app: aspnet-app
   type: ClusterIP
 
+---
+#ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aspnet-app-ingress
+  namespace: aspnet-app
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - aks.azureholic.com
+    secretName: tls-secret
+  rules:
+  - host: aks.azureholic.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: aspnet-app-service
+            port:
+              number: 80
