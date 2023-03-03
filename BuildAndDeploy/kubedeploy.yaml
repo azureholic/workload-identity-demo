@@ -13,6 +13,7 @@ kind: ServiceAccount
 metadata:
   annotations:
     azure.workload.identity/client-id: 16cd2267-9b37-4622-b416-b75ec1bfb29c
+    azure.workload.identity/tenant-id: 16b3c013-d300-468d-ac64-7eda0820b6d3
   labels:
     azure.workload.identity/use: "true"  
   name: aspnet-sa
@@ -40,7 +41,7 @@ spec:
       serviceAccountName: aspnet-sa
       containers:
       - name: aspnet-app
-        image: rbrcontainerregistry.azurecr.io/aspnetapp:33
+        image: rbrcontainerregistry.azurecr.io/aspnetapp:36
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 8080
