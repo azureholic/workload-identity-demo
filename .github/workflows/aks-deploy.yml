@@ -37,6 +37,7 @@ jobs:
     - name: Setup kubectl
       uses: azure/setup-kubectl@v3
       
+      #deploy
     - name: Deploy to AKS
       uses: Azure/k8s-deploy@v4
       with:
