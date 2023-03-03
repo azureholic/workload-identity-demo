@@ -27,7 +27,7 @@ metadata:
   name: aspnet-app-deployment
   namespace: aspnet-app
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       service: aspnet-app
