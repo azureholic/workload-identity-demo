@@ -20,10 +20,10 @@ var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredenti
 
 Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
 
-//builder.Services.AddDataProtection()
-//    .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
-//    .ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyvaultUri"]), dataProtectionCredential)
-//    .SetApplicationName("WorkloadIdentityApp");
+builder.Services.AddDataProtection()
+    .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
+    .ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyvaultUri"]), dataProtectionCredential)
+    .SetApplicationName("WorkloadIdentityApp");
 
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
      .AddMicrosoftIdentityWebApp(options => {
