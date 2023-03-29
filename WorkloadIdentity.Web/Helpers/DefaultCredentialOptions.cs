@@ -27,6 +27,7 @@ public static class DefaultCredentialOptions {
         }
 
         if (environment.IsDevelopment()) {
+            credentialOptions.ExcludeManagedIdentityCredential = true;
             credentialOptions.ExcludeAzureCliCredential = false;
         }
 

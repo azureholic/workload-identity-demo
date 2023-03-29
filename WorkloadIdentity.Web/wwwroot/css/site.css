@@ -1,5 +1,6 @@
 html {
   font-size: 14px;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
 
 @media (min-width: 768px) {
@@ -19,4 +20,12 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.header {
+    height: 20px;
+    padding: 10px;
+    text-align: right;
+    background-color: #0078d4;
+    color: #ffffff
 }

@@ -8,9 +8,12 @@
    
 </head>
 <body>
-    <header>
-        Hello @User.Identity.Name
+    <header class="header">
+        
+        @User.Identity.Name
+       
     </header>
+    <fluent-divider></fluent-divider>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

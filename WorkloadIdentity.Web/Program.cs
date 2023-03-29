@@ -17,14 +17,17 @@ DefaultAzureCredentialOptions dataProtectionCredentialOptions =
 
 var dataProtectionCredential = new DefaultAzureCredential(dataProtectionCredentialOptions);
 
-
-Console.WriteLine(dataProtectionCredentialOptions.ManagedIdentityClientId);
-
+//When running in K8S with more than 1 instance you need DataProtection to support
+//Azure AD authentication. This example uses blob storage, but could also be
+//mounted storage, as long as you share it between all the pods.
 builder.Services.AddDataProtection()
     .PersistKeysToAzureBlobStorage(new Uri(builder.Configuration["DataProtection:StorageAccountUri"]), dataProtectionCredential)
     .ProtectKeysWithAzureKeyVault(new Uri(builder.Configuration["DataProtection:KeyvaultUri"]), dataProtectionCredential)
     .SetApplicationName("WorkloadIdentityApp");
 
+//Azure AD Authentication.
+//Redirect back to the ingress controller URL (the forwarder)
+//Same approach for AppGw or Azure Frontdoor
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
      .AddMicrosoftIdentityWebApp(options => {
             builder.Configuration.Bind("AzureAd", options);
@@ -43,7 +46,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
   
 
 
-
+//no anonymous access for entire application
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = options.DefaultPolicy;
@@ -58,8 +61,10 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 
 
-
 // Add services to the container.
+
+builder.Services.AddHealthChecks();
+
 builder.Services.AddRazorPages()
     .AddMicrosoftIdentityUI();
 
@@ -87,6 +92,12 @@ app.UseForwardedHeaders();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.MapHealthChecks("/health").AllowAnonymous();
 app.MapRazorPages();
 app.MapControllers();
+
+Console.WriteLine("The number of processors " +
+        "on this computer is {0}.",
+        Environment.ProcessorCount);
+
 app.Run();
