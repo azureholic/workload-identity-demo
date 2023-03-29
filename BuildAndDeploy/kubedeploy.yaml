@@ -43,6 +43,13 @@ spec:
       - name: aspnet-app
         image: rbrcontainerregistry.azurecr.io/aspnetapp:36
         imagePullPolicy: IfNotPresent
+        resources:
+            requests:
+                cpu: 500m
+                memory: 256Mi
+            limits:
+                cpu: 750m
+                memory: 512Mi
         ports:
         - containerPort: 8080
           protocol: TCP
