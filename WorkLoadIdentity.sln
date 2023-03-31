@@ -7,10 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkloadIdentity.Web", "Wor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{B0F2A4F4-A552-4B33-9B26-15C42652FF41}"
 	ProjectSection(SolutionItems) = preProject
-		BuildAndDeploy\azure-wi-webhook.yaml = BuildAndDeploy\azure-wi-webhook.yaml
 		BuildAndDeploy\kubedeploy.yaml = BuildAndDeploy\kubedeploy.yaml
-		BuildAndDeploy\nginx-route.yaml = BuildAndDeploy\nginx-route.yaml
-		BuildAndDeploy\wi-sp.yaml = BuildAndDeploy\wi-sp.yaml
 	EndProjectSection
 EndProject
 Global
