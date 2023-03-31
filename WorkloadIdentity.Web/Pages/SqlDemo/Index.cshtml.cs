@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 using System.Data;
 using System.Data.SqlClient;
+using System.IdentityModel.Tokens.Jwt;
 using WorkloadIdentity.Web.Helpers;
 
 namespace WorkloadIdentity.Web.Pages.SqlDemo
@@ -52,8 +53,12 @@ namespace WorkloadIdentity.Web.Pages.SqlDemo
 
                 DataSet ds = new DataSet();
                 da.Fill(ds);
-                
+                                
                 SqlDemoViewModel.JsonData = JsonConvert.SerializeObject(ds.Tables[0], Formatting.Indented);
+
+                var handler = new JwtSecurityTokenHandler();
+                var jwtSecurityToken = handler.ReadJwtToken(token.Token);
+                SqlDemoViewModel.Token = JwtFormatter.Prettify(jwtSecurityToken);
             }
             catch (Exception ex)
             {
