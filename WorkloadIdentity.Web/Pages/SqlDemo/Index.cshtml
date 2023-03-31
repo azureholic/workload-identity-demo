@@ -1,0 +1,24 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<h1>
+    Managed Identity Demo App - Access SQL by Tenant Context
+</h1>
+<fluent-card class="customcard">
+
+
+    <form method="post">
+
+    <fluent-select>
+        <fluent-option selected value="deb5d59e-8a1d-4860-8342-0eee384b3057">Make call on behalf of customer 1</fluent-option>
+        <fluent-option value="">Make call on behalf of customer 2</fluent-option>
+    </fluent-select>
+
+    <fluent-button id="MI" name="MI" type="submit">Pod1-ID Managed Identity</fluent-button>
+
+</form>
+
+@ViewData["Secret"]

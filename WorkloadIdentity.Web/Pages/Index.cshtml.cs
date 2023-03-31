@@ -24,29 +24,7 @@ namespace WorkloadIdentity.Web.Pages
 
         public void OnPost()
         {
-            string keyvaultUrl = "https://rbr-kv-we.vault.azure.net/";
-            string secretName = "supersecret";
-
-            
-            DefaultAzureCredentialOptions options = 
-                DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
-                    "deb5d59e-8a1d-4860-8342-0eee384b3057", 
-                    _environment);
-
-            try {
-                SecretClient client = new SecretClient(
-                  new Uri(keyvaultUrl),
-                  new DefaultAzureCredential(options));
-
-                
-                var keyvaultSecret = client.GetSecret(secretName).Value;
-                ViewData["Secret"] = $"Your secret is {keyvaultSecret.Value}";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);   
-            }
-            
+           
         }
     }
 }

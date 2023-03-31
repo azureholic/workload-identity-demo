@@ -8,17 +8,50 @@
    
 </head>
 <body>
-    <header class="header">
-        
-        @User.Identity.Name
-       
-    </header>
-    <fluent-divider></fluent-divider>
-    <div class="container">
-        <main role="main" class="pb-3">
+    <section id="page">
+        <header class="header">
+            <a href="/">Managed Identity Demo</a>
+            <div class="userinfo">
+            @User.Identity.Name    
+            </div>
+        </header>
+        <nav>
+            <div class="nav-container">
+                <a href="KeyvaultDemo" class="nav-link">
+                    <div class="nav-item">
+                        <span class="nav-icon">
+                            <img src="/img/keyvault.svg" />
+                        </span>
+                        Azure Keyvault
+                    </div>
+                </a>
+
+                <a href="SqlDemo" class="nav-link">
+                    <div class="nav-item">
+                        <span class="nav-icon">
+                            <img src="/img/sql.svg" />
+                        </span>
+                        SQL Demo
+                    </div>
+                </a>
+               
+                
+            </div>
+
+        </nav>
+        <main>
+
             @RenderBody()
+            
+
+           
+
+
+
+
+
         </main>
-    </div>
+    </section>
 
     
     <script type="module" src="https://unpkg.com/%40fluentui/web-components"></script>
