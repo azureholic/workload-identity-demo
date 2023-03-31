@@ -2,6 +2,9 @@
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
+using System.Data;
+using System.Data.SqlClient;
 using WorkloadIdentity.Web.Helpers;
 
 namespace WorkloadIdentity.Web.Pages.SqlDemo
@@ -11,6 +14,9 @@ namespace WorkloadIdentity.Web.Pages.SqlDemo
         private readonly ILogger<IndexModel> _logger;
         private readonly IWebHostEnvironment _environment;
 
+        [BindProperty]
+        public SqlDemoViewModel SqlDemoViewModel { get; set; }
+        
         public IndexModel(ILogger<IndexModel> logger, IWebHostEnvironment environment)
         {
             _logger = logger;
@@ -19,31 +25,39 @@ namespace WorkloadIdentity.Web.Pages.SqlDemo
 
         public void OnGet()
         {
-            
+            SqlDemoViewModel = new SqlDemoViewModel();
+
         }
 
         public void OnPost()
         {
-            string keyvaultUrl = "https://rbr-kv-we.vault.azure.net/";
-            string secretName = "supersecret";
-
             
             DefaultAzureCredentialOptions options = 
                 DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
-                    "deb5d59e-8a1d-4860-8342-0eee384b3057", 
+                    SqlDemoViewModel.SelectedIdentity, 
                     _environment);
 
+            
             try {
-                SecretClient client = new SecretClient(
-                  new Uri(keyvaultUrl),
-                  new DefaultAzureCredential(options));
+                var credentials = new DefaultAzureCredential(options);
+                var token = credentials.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net//.default" }));
+                SqlConnection conn = new SqlConnection($"Data Source=rbr-sql-we2.database.windows.net; Initial Catalog={SqlDemoViewModel.SelectedDatabase}");
+                conn.AccessToken = token.Token;
 
+                SqlCommand cmd = new SqlCommand();
+                cmd.CommandText = "SELECT * FROM Orders";
+                cmd.Connection = conn;
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+
+                DataSet ds = new DataSet();
+                da.Fill(ds);
                 
-                var keyvaultSecret = client.GetSecret(secretName).Value;
-                ViewData["Secret"] = $"Your secret is {keyvaultSecret.Value}";
+                SqlDemoViewModel.JsonData = JsonConvert.SerializeObject(ds.Tables[0], Formatting.Indented);
             }
             catch (Exception ex)
             {
+                SqlDemoViewModel.Error =  ex.Message;
                 _logger.LogError(ex.Message);   
             }
             
