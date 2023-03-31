@@ -1,7 +1,10 @@
-﻿using Azure.Identity;
+﻿using Azure.Core;
+using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.IdentityModel.Tokens.Jwt;
 using WorkloadIdentity.Web.Helpers;
 
 namespace WorkloadIdentity.Web.Pages.KeyVaultDemo
@@ -34,13 +37,21 @@ namespace WorkloadIdentity.Web.Pages.KeyVaultDemo
                     _environment);
 
             try {
+
+                var credentials = new DefaultAzureCredential(options);
                 SecretClient client = new SecretClient(
                   new Uri(keyvaultUrl),
-                  new DefaultAzureCredential(options));
+                  credentials);
 
+                var token = credentials.GetToken(new TokenRequestContext(new[] {"https://vault.azure.net/.default"}));
+                var handler = new JwtSecurityTokenHandler();
+                var jwtSecurityToken = handler.ReadJwtToken(token.Token);
                 
+
                 var keyvaultSecret = client.GetSecret(secretName).Value;
-                ViewData["Secret"] = $"Your secret is {keyvaultSecret.Value}";
+                ViewData["Secret"] = keyvaultSecret.Value;
+                
+                ViewData["Token"] = JwtFormatter.Prettify(jwtSecurityToken);
             }
             catch (Exception ex)
             {

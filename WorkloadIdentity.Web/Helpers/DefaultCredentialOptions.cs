@@ -26,7 +26,7 @@ public static class DefaultCredentialOptions {
             credentialOptions.ManagedIdentityClientId = clientId;
         }
 
-        if (environment.IsDevelopment()) {
+        if (environment.EnvironmentName == "Local Development") {
             credentialOptions.ExcludeManagedIdentityCredential = true;
             credentialOptions.ExcludeAzureCliCredential = false;
         }

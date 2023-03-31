@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject IWebHostEnvironment environment
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -12,7 +14,7 @@
         <header class="header">
             <a href="/">Managed Identity Demo</a>
             <div class="userinfo">
-            @User.Identity.Name    
+                @environment.EnvironmentName | @User.Identity.Name    
             </div>
         </header>
         <nav>

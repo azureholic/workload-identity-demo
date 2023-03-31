@@ -4,7 +4,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Local Development"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5026"
@@ -13,7 +13,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_ENVIRONMENT": "Local Development",
         "AZURE_TENANT_ID": "16b3c013-d300-468d-ac64-7eda0820b6d3"
       },
       "dotnetRunMessages": true,

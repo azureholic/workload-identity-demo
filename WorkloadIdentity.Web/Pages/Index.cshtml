@@ -10,12 +10,21 @@
 </h1>
 
 <fluent-card class="customcard">
-    <div>
-        This application demonstrates how to use Managed Identity to access Azure Resources
-    </div>
-    <div>
-        This application is currently running in @environment.EnvironmentName
-    </div>
+    <p>
+        This application demonstrates how to use Managed Identities to access Azure Resources. 
+        It can be run in several environments and uses Workload Identities on AKS and demonstrates
+        Federated Identities.
+    </p>
+    <p>
+        Source code can be found in this GitHub repo: 
+        <a href="https://github.com/azureholic/workload-identity-demo" target="_blank">
+            https://github.com/azureholic/workload-identity-demo
+        </a>
+    </p>
+    <p>
+        This application is currently running in environment: <b>@environment.EnvironmentName</b>
+    </p>
+    
 
 </fluent-card>
 
