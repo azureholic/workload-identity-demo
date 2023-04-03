@@ -35,7 +35,7 @@ namespace WorkloadIdentity.Web.Pages.AzureDevOps
 
             DefaultAzureCredentialOptions options =
                 DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
-                    "deb5d59e-8a1d-4860-8342-0eee384b3057",
+                    "6f89b5c1-88e6-4748-a2cb-6b1f88e65352",
                     "d5080e1b-64bc-40e7-9565-31d084679242",
                     _environment);
 
