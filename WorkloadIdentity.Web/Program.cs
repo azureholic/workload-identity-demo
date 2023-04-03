@@ -1,5 +1,6 @@
 using Azure.Core.Diagnostics;
 using Azure.Identity;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -30,7 +31,8 @@ builder.Services.AddDataProtection()
 //Same approach for AppGw or Azure Frontdoor
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
      .AddMicrosoftIdentityWebApp(options => {
-            builder.Configuration.Bind("AzureAd", options);
+         builder.Configuration.Bind("AzureAd", options);
+         options.SaveTokens = true;
             options.Events = new OpenIdConnectEvents
             {
                 OnRedirectToIdentityProvider = (context) =>
@@ -41,6 +43,8 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
                     }
                     return Task.FromResult(0);
                 }
+                
+                
             };
         });
   
@@ -60,9 +64,8 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 });
 
 
-
 // Add services to the container.
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddHealthChecks();
 
 builder.Services.AddRazorPages()

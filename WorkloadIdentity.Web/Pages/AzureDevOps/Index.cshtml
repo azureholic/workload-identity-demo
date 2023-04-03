@@ -1,0 +1,14 @@
+﻿@page
+@model WorkloadIdentity.Web.Pages.AzureDevOps.IndexModel
+@{
+}
+<h1>
+    Managed Identity Demo App - Azure DevOps
+</h1>
+<fluent-card class="customcard">
+   
+    <pre><code>@ViewData["Token"]</code></pre>
+</fluent-card>
+<form method="post">
+    <fluent-button id="MI" name="MI" type="submit">Get Token</fluent-button>
+</form>

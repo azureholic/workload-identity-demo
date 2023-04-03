@@ -3,7 +3,7 @@
 namespace WorkloadIdentity.Web.Helpers;
 
 public static class DefaultCredentialOptions {
-    private static DefaultAzureCredentialOptions GetDefaultAzureCredentialOptionsImpl(string? clientId, IWebHostEnvironment environment) {
+    private static DefaultAzureCredentialOptions GetDefaultAzureCredentialOptionsImpl(string? clientId, string? tenantId, IWebHostEnvironment environment) {
 
         DefaultAzureCredentialOptions credentialOptions = new() {
             Diagnostics =
@@ -22,9 +22,15 @@ public static class DefaultCredentialOptions {
             ExcludeManagedIdentityCredential = false
         };
 
-        if (clientId != null) {
+        if (clientId is not null) {
             credentialOptions.ManagedIdentityClientId = clientId;
         }
+
+        if (tenantId is not null)
+        {
+            credentialOptions.TenantId = tenantId;
+        }
+
 
         if (environment.EnvironmentName == "Local Development") {
             credentialOptions.ExcludeManagedIdentityCredential = true;
@@ -35,10 +41,15 @@ public static class DefaultCredentialOptions {
     }
 
     public static DefaultAzureCredentialOptions GetDefaultAzureCredentialOptions(IWebHostEnvironment environment) {
-        return GetDefaultAzureCredentialOptionsImpl(null, environment);
+        return GetDefaultAzureCredentialOptionsImpl(null, null, environment);
     }
 
     public static DefaultAzureCredentialOptions GetDefaultAzureCredentialOptions(string clientId, IWebHostEnvironment environment) {
-        return GetDefaultAzureCredentialOptionsImpl(clientId, environment);
+        return GetDefaultAzureCredentialOptionsImpl(clientId, null, environment);
+    }
+
+    public static DefaultAzureCredentialOptions GetDefaultAzureCredentialOptions(string clientId, string tenantId, IWebHostEnvironment environment)
+    {
+        return GetDefaultAzureCredentialOptionsImpl(clientId, tenantId, environment);
     }
 }
