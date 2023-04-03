@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.TeamFoundation.Build.WebApi;
 using Microsoft.TeamFoundation.Core.WebApi;
 using Microsoft.TeamFoundation.SourceControl.WebApi;
+using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
 using Microsoft.VisualStudio.Services.WebApi;
 using Newtonsoft.Json.Linq;
@@ -46,6 +47,7 @@ namespace WorkloadIdentity.Web.Pages.AzureDevOps
                 var token = credentials.GetToken(new TokenRequestContext(new[] { "499b84ac-1321-427f-aa17-267ca6975798/.default" }));
                 var handler = new JwtSecurityTokenHandler();
                 var jwtSecurityToken = handler.ReadJwtToken(token.Token);
+                ViewData["Token"] = JwtFormatter.Prettify(jwtSecurityToken);
 
 
                 const String collectionUri = "https://dev.azure.com/azureholic";
@@ -53,7 +55,8 @@ namespace WorkloadIdentity.Web.Pages.AzureDevOps
                 
 
                 // Connect to Azure DevOps Services
-                VssCredentials creds = new VssBasicCredential(string.Empty, token.Token);
+                VssAadToken vssToken = new VssAadToken("Bearer", token.Token);
+                VssAadCredential creds = new VssAadCredential(vssToken);
                 VssConnection connection = new VssConnection(new Uri(collectionUri), creds);
 
                 var buildClient = connection.GetClient<BuildHttpClient>();
@@ -71,7 +74,7 @@ namespace WorkloadIdentity.Web.Pages.AzureDevOps
 
                 await buildClient.QueueBuildAsync(pipeline);
 
-                ViewData["Token"] = JwtFormatter.Prettify(jwtSecurityToken);
+               
             }
             catch (Exception ex)
             {
