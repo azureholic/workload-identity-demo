@@ -31,8 +31,7 @@ builder.Services.AddDataProtection()
 //Same approach for AppGw or Azure Frontdoor
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
      .AddMicrosoftIdentityWebApp(options => {
-         builder.Configuration.Bind("AzureAd", options);
-         options.SaveTokens = true;
+            builder.Configuration.Bind("AzureAd", options);
             options.Events = new OpenIdConnectEvents
             {
                 OnRedirectToIdentityProvider = (context) =>
