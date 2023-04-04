@@ -24,9 +24,9 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
    
-  #  - name: Build Container
-  #    working-directory: ./WorkloadIdentity.Web
-  #    run: az acr build -r rbrcr -t rbrcr.azurecr.io/aspnetapp:${{ github.run_number }} --file dockerfile --platform linux .
+    - name: Build Container
+      working-directory: ./WorkloadIdentity.Web
+      run: az acr build -r rbrcr -t rbrcr.azurecr.io/aspnetapp:${{ github.run_number }} --file dockerfile --platform linux .
 
     - name: Set AKS context
       uses: azure/aks-set-context@v3
@@ -43,7 +43,6 @@ jobs:
       with:
         namespace: 'aspnet-app'
         manifests: ./BuildAndDeploy/kubedeploy.yaml
-        #images: 'rbrcr.azurecr.io/aspnetapp:${{ github.run_number }}'
-        images: 'rbrcr.azurecr.io/aspnetapp:58'
+        images: 'rbrcr.azurecr.io/aspnetapp:${{ github.run_number }}'
         pull-images: false 
       
