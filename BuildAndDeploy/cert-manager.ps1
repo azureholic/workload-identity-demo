@@ -1,4 +1,4 @@
-$RegistryName = "rbrcontainerregistry"
+$RegistryName = "rbrcr"
 $ResourceGroup = (Get-AzContainerRegistry | Where-Object { $_.name -eq $RegistryName } ).ResourceGroupName
 $CertManagerRegistry = "quay.io"
 $CertManagerTag = "v1.8.0"

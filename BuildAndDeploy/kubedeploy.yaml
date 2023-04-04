@@ -88,7 +88,8 @@ metadata:
   namespace: aspnet-app
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    
 spec:
   ingressClassName: nginx
   tls:
