@@ -94,7 +94,7 @@ spec:
   tls:
   - hosts:
     - wid.azureholic.com
-    secretName: tls-secret-5qphz
+    secretName: tls-secret
   rules:
   - host: wid.azureholic.com
     http:
