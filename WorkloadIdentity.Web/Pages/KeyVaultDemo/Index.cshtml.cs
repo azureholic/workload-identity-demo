@@ -13,11 +13,13 @@ namespace WorkloadIdentity.Web.Pages.KeyVaultDemo
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
 
-        public IndexModel(ILogger<IndexModel> logger, IWebHostEnvironment environment)
+        public IndexModel(ILogger<IndexModel> logger, IWebHostEnvironment environment, IConfiguration configuration)
         {
             _logger = logger;
             _environment = environment;
+            _configuration = configuration;
         }
 
         public void OnGet()
@@ -27,13 +29,14 @@ namespace WorkloadIdentity.Web.Pages.KeyVaultDemo
 
         public void OnPost()
         {
-            string keyvaultUrl = "https://rbr-kv-we.vault.azure.net/";
+            string keyvaultUrl = _configuration["Endpoints:Keyvault"];
             string secretName = "supersecret";
+            string systemIdentity = _configuration["ManagedIdentities:System"];
 
             
             DefaultAzureCredentialOptions options = 
                 DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
-                    "deb5d59e-8a1d-4860-8342-0eee384b3057", 
+                    systemIdentity, 
                     _environment);
 
             try {

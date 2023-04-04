@@ -19,11 +19,13 @@ namespace WorkloadIdentity.Web.Pages.AzureDevOps
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly IWebHostEnvironment _environment;
+        private readonly IConfiguration _configuration;
 
-        public IndexModel(ILogger<IndexModel> logger, IWebHostEnvironment environment)
+        public IndexModel(ILogger<IndexModel> logger, IWebHostEnvironment environment, IConfiguration configuration)
         {
             _logger = logger;
             _environment = environment;
+            _configuration = configuration;
         }
         public void OnGet()
         {
@@ -31,13 +33,13 @@ namespace WorkloadIdentity.Web.Pages.AzureDevOps
 
         public async Task OnPost()
         {
-            
+
+            string devopsIdentity = _configuration["ManagedIdentities:DevOps"];
+            string devopsUri = _configuration["Endpoints:AzureDevOps"];
 
             DefaultAzureCredentialOptions options =
                 DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
-                    "6f89b5c1-88e6-4748-a2cb-6b1f88e65352",
-                    "d5080e1b-64bc-40e7-9565-31d084679242",
-                    _environment);
+                    devopsIdentity, _environment);
 
             try
             {

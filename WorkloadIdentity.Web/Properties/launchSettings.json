@@ -14,7 +14,7 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Local Development",
-        "AZURE_TENANT_ID": "16b3c013-d300-468d-ac64-7eda0820b6d3"
+        "AZURE_TENANT_ID": "d5080e1b-64bc-40e7-9565-31d084679242"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7141;http://localhost:5026"
