@@ -26,7 +26,7 @@ jobs:
   
     - name: Build Container
       working-directory: ./WorkloadIdentity.Web
-      run: az acr build -r rbrcr -t rbrcr.azurecr.io/aspnetapp:${{ github.run_number }} --file dockerfile --platform linux .
+      run: az acr build -r rbrcr.azurecr.io -t rbrcr.azurecr.io/aspnetapp:${{ github.run_number }} --file dockerfile --platform linux .
 
     - name: Set AKS context
       uses: azure/aks-set-context@v3
