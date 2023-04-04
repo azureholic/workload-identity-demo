@@ -1,4 +1,4 @@
-name: Build and Deploy to AKS
+name: Build Container
 on: 
   workflow_dispatch:
  
