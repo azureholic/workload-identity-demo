@@ -13,17 +13,25 @@ public static class DefaultCredentialOptions {
                 IsLoggingContentEnabled = true
             },
 
+            //exclude all credential types for local development
             ExcludeSharedTokenCacheCredential = true,
             ExcludeVisualStudioCodeCredential = true,
             ExcludeVisualStudioCredential = true,
             ExcludeAzureCliCredential = true,
             ExcludeInteractiveBrowserCredential = true,
             ExcludeEnvironmentCredential = true,
+            ExcludeAzureDeveloperCliCredential = true,
+            ExcludeAzurePowerShellCredential = true,
+
+            //include all credential types for production
+            ExcludeWorkloadIdentityCredential = false,
             ExcludeManagedIdentityCredential = false
+            
         };
 
         if (clientId is not null) {
             credentialOptions.ManagedIdentityClientId = clientId;
+            credentialOptions.WorkloadIdentityClientId = clientId;
         }
 
         if (tenantId is not null)
@@ -34,6 +42,8 @@ public static class DefaultCredentialOptions {
 
         if (environment.EnvironmentName == "Local Development") {
             credentialOptions.ExcludeManagedIdentityCredential = true;
+            credentialOptions.ExcludeWorkloadIdentityCredential = true;
+            //default to AzureCli Credentials for local development
             credentialOptions.ExcludeAzureCliCredential = false;
         }
 

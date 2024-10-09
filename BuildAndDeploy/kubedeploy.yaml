@@ -6,14 +6,14 @@ metadata:
   name: aspnet-app
   labels:
     name: aspnet-app
+
 ---
 #service account
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   annotations:
-    azure.workload.identity/client-id: 2217d74b-e1ab-410b-8ba3-9406e4af0d90
-    azure.workload.identity/tenant-id: d5080e1b-64bc-40e7-9565-31d084679242
+    azure.workload.identity/client-id: 3a870abd-a99e-49d1-b281-9158f8f2c253
   labels:
     azure.workload.identity/use: "true"  
   name: aspnet-sa
@@ -41,7 +41,7 @@ spec:
       serviceAccountName: aspnet-sa
       containers:
       - name: aspnet-app
-        image: rbrcr.azurecr.io/aspnetapp:58
+        image: rbrcr.azurecr.io/aspnetapp:latest
         imagePullPolicy: IfNotPresent
         resources:
             requests:
@@ -58,9 +58,7 @@ spec:
           value: "Kubernetes"
         - name: "ASPNETCORE_URLS"
           value: "http://+:8080"
-        
-        
-          
+
 ---
 # service
 apiVersion: v1
@@ -84,26 +82,24 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: aspnet-app-ingress
-  namespace: aspnet-app
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    
+    kubernetes.azure.com/tls-cert-keyvault-uri: https://rbr-kv-management.vault.azure.net/certificates/wildcard-azureholic-com
+  name: aspnet-app-ingress
+  namespace:  aspnet-app
 spec:
-  ingressClassName: nginx
-  tls:
-  - hosts:
-    - wid.azureholic.com
-    secretName: tls-secret
+  ingressClassName: webapprouting.kubernetes.azure.com
   rules:
-  - host: wid.azureholic.com
+  - host: aksdemo.azureholic.com
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
+      - backend:
           service:
             name: aspnet-app-service
             port:
               number: 80
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - aksdemo.azureholic.com
+    secretName: keyvault-aspnet-app-ingress

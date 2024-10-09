@@ -31,7 +31,7 @@ jobs:
     - name: Set AKS context
       uses: azure/aks-set-context@v3
       with:
-        resource-group: 'rg-aks' 
+        resource-group: 'rg-workloadidentity-demo' 
         cluster-name: 'rbr-aks-demo'
   
     - name: Setup kubectl

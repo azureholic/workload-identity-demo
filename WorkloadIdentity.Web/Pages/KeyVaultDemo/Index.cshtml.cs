@@ -33,6 +33,7 @@ namespace WorkloadIdentity.Web.Pages.KeyVaultDemo
             string secretName = "supersecret";
             string systemIdentity = _configuration["ManagedIdentities:System"];
 
+            _logger.LogInformation($"trying to connect to {keyvaultUrl}");
             
             DefaultAzureCredentialOptions options = 
                 DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
