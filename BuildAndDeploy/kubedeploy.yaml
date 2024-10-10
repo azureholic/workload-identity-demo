@@ -41,7 +41,7 @@ spec:
       serviceAccountName: aspnet-sa
       containers:
       - name: aspnet-app
-        image: rbrcr.azurecr.io/aspnetapp:latest
+        image: rbrcr.azurecr.io/aspnetapp:001
         imagePullPolicy: IfNotPresent
         resources:
             requests:

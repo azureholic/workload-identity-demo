@@ -50,20 +50,31 @@ namespace WorkloadIdentity.Web.Pages.SqlDemo
             SqlDemoViewModel.Identities.Add(new SelectListItem { Value = customer02Id, Text = "Customer 02 (Hardware)" });
 
             string sqlEndpoint = _configuration["Endpoints:SqlServer"];
-            DefaultAzureCredentialOptions options = 
-                DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
-                    SqlDemoViewModel.SelectedIdentity, 
-                    _environment);
+            string databaseName = _configuration["Endpoints:Database"];
+            string systemIdentity = _configuration["ManagedIdentities:System"];
 
-            
+            //DefaultAzureCredentialOptions options = 
+            //    DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
+            //        SqlDemoViewModel.SelectedIdentity, 
+            //        _environment);
+
+            DefaultAzureCredentialOptions options =
+               DefaultCredentialOptions.GetDefaultAzureCredentialOptions(
+                   systemIdentity,
+                   _environment);
+
+
             try {
                 var credentials = new DefaultAzureCredential(options);
                 var token = credentials.GetToken(new Azure.Core.TokenRequestContext(new[] { "https://database.windows.net//.default" }));
-                SqlConnection conn = new SqlConnection($"Data Source={sqlEndpoint}; Initial Catalog={SqlDemoViewModel.SelectedDatabase}");
+                //SqlConnection conn = new SqlConnection($"Data Source={sqlEndpoint}; Initial Catalog={SqlDemoViewModel.SelectedDatabase}");
+                SqlConnection conn = new SqlConnection($"Data Source={sqlEndpoint}; Initial Catalog={databaseName}");
+
                 conn.AccessToken = token.Token;
 
                 SqlCommand cmd = new SqlCommand();
-                cmd.CommandText = "SELECT * FROM Orders";
+                //cmd.CommandText = "SELECT * FROM Orders";
+                cmd.CommandText = "SELECT TOP 5 FirstName, LastName from [SalesLT].[Customer]";
                 cmd.Connection = conn;
 
                 SqlDataAdapter da = new SqlDataAdapter(cmd);

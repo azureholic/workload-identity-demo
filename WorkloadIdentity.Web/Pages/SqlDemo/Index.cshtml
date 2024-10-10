@@ -5,7 +5,7 @@
 }
 
 <h1>
-    Managed Identity Demo App - Access SQL by Tenant Context
+    Managed Identity Demo App - Access SQL @* by Tenant Context *@
 </h1>
 <fluent-card class="customcard">
     <pre><code>@Model.SqlDemoViewModel.Error</code></pre>
@@ -14,7 +14,7 @@
 </fluent-card>
 <form method="post">
     
-    <fluent-select title="Select an Identity" name="SelectedIdentity">
+   @*  <fluent-select title="Select an Identity" name="SelectedIdentity">
         @foreach (var identity in Model.SqlDemoViewModel.Identities)
         {
             if (identity.Value == Model.SqlDemoViewModel.SelectedIdentity)
@@ -41,7 +41,7 @@
             }
             
         }
-    </fluent-select>
+    </fluent-select> *@
     <fluent-button id="MI" name="MI" type="submit">Get Token and SqlData</fluent-button>
 </form>
 
